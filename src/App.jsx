@@ -10,6 +10,7 @@ import 'lenis/dist/lenis.css';
 import HomePage from './components/HomePage';
 import Navbar from './components/Navbar';
 import StoryHUD from './components/StoryHUD';
+import ParallaxBackground from './components/ParallaxBackground';
 
 // CSS
 import './index.css';
@@ -151,6 +152,7 @@ const App = () => {
     return (
         <Router>
             <div className="min-h-screen paper-texture paper-grain text-ink selection:bg-yellow-200 selection:text-ink pb-32">
+                <ParallaxBackground />
                 <StoryHUD />
                 <CustomCursor />
                 <Navbar />

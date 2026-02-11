@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useMemo } from 'react';
 import ContactPage from './ContactPage';
+import HeroScene3D from './HeroScene3D';
+import ParallaxBackground from './ParallaxBackground';
 import { motion } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -23,7 +25,9 @@ const Reveal = ({ children, delay = 0, y = 30 }) => {
 
 const MainHero = ({ data }) => {
     return (
-        <div className="perspective-2000 py-28 mb-40">
+        <div className="perspective-2000 py-28 mb-40 relative">
+            {/* 3D Background Scene */}
+            <HeroScene3D />
             {/* Story Hook Typewriter */}
             <div className="absolute top-0 left-0 p-8 z-50">
                 <motion.div
