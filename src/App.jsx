@@ -9,6 +9,7 @@ import 'lenis/dist/lenis.css';
 // Modular Components
 import HomePage from './components/HomePage';
 import Navbar from './components/Navbar';
+import StoryHUD from './components/StoryHUD';
 
 // CSS
 import './index.css';
@@ -41,12 +42,17 @@ const CustomCursor = () => {
 
     return (
         <>
-            <div ref={cursorRef} className="custom-cursor fixed top-0 left-0 -ml-2 -mt-8 flex items-center justify-center pointer-events-none z-[9999]" style={{ filter: "drop-shadow(2px 4px 2px rgba(0,0,0,0.2))" }}>
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M13.5 10L14 9.5L13.5 10ZM13.5 10L14.5 11L13.5 10ZM15 6L18 9L7 20H4V17L15 6Z" stroke="#2d2d2d" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M15 6L18 9" stroke="#2d2d2d" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M4 20L6 18" stroke="#2d2d2d" strokeWidth="3" strokeLinecap="round" />
-                </svg>
+            <div
+                ref={cursorRef}
+                className="custom-cursor fixed top-0 left-0 -ml-5 -mt-5 w-10 h-10 lens-cursor fixed flex items-center justify-center pointer-events-none z-[9999]"
+            >
+                {/* Center dot */}
+                <div className="w-1 h-1 bg-blue-500 rounded-full"></div>
+                {/* Crosshair lines */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1px] h-2 bg-white/20"></div>
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[1px] h-2 bg-white/20"></div>
+                <div className="absolute left-0 top-1/2 -translate-y-1/2 h-[1px] w-2 bg-white/20"></div>
+                <div className="absolute right-0 top-1/2 -translate-y-1/2 h-[1px] w-2 bg-white/20"></div>
             </div>
             <AnimatePresence>
                 {trails.map((t, i) => (
@@ -55,7 +61,7 @@ const CustomCursor = () => {
                         initial={{ opacity: 0.3, scale: 1 }}
                         animate={{ opacity: 0, scale: 0.5 }}
                         exit={{ opacity: 0 }}
-                        className="fixed w-[2px] h-[2px] bg-pencil/40 rounded-full pointer-events-none z-[9998]"
+                        className="fixed w-[2px] h-[2px] bg-blue-400/40 rounded-full pointer-events-none z-[9998]"
                         style={{ left: t.x, top: t.y, filter: "blur(0.5px)" }}
                     />
                 ))}
@@ -145,6 +151,7 @@ const App = () => {
     return (
         <Router>
             <div className="min-h-screen paper-texture paper-grain text-ink selection:bg-yellow-200 selection:text-ink pb-32">
+                <StoryHUD />
                 <CustomCursor />
                 <Navbar />
 

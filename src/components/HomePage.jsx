@@ -24,6 +24,22 @@ const Reveal = ({ children, delay = 0, y = 30 }) => {
 const MainHero = ({ data }) => {
     return (
         <div className="perspective-2000 py-28 mb-40">
+            {/* Story Hook Typewriter */}
+            <div className="absolute top-0 left-0 p-8 z-50">
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="hand-drawn-font text-ink/40 text-[10px] tracking-[0.3em] flex flex-col gap-1"
+                >
+                    <div className="flex gap-2 items-center">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                        <span>SYSTEM: AUTHORIZATION GRANTED</span>
+                    </div>
+                    <div>SUBJECT: DINESH M. // CLASS: MERN ELITE</div>
+                    <div className="typewriter w-fit">CLEARANCE: TOP SECRET // ACCESSING CASE FILES...</div>
+                </motion.div>
+            </div>
+
             <motion.div
                 initial={{ opacity: 0, scale: 0.9, y: 50 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -35,6 +51,18 @@ const MainHero = ({ data }) => {
                         whileHover={{ rotateY: 5, rotateX: -5 }}
                         className="relative bg-white p-16 shadow-paper-lg border-2 border-ink -rotate-1 transform transition-all group-hover:shadow-paper-2xl duration-500"
                     >
+                        {/* Classified Stamp Slam */}
+                        <motion.div
+                            initial={{ scale: 3, opacity: 0, rotate: -45 }}
+                            animate={{ scale: 1, opacity: 1, rotate: -15 }}
+                            transition={{ delay: 1.5, type: "spring", stiffness: 300, damping: 15 }}
+                            className="absolute -top-10 -right-10 z-50 pointer-events-none"
+                        >
+                            <div className="px-8 py-4 border-8 border-red-600/80 text-red-600/80 hand-drawn-font text-5xl font-bold uppercase tracking-tighter mix-blend-multiply rotate-[-5deg] bg-white/10 backdrop-blur-[1px] shadow-lg">
+                                Classified
+                            </div>
+                        </motion.div>
+
                         <div className="absolute top-0 right-0 w-40 h-40 overflow-hidden pointer-events-none -translate-x-[2px] translate-y-[2px]">
                             <div className="absolute top-0 right-0 w-full h-full bg-yellow-100 -rotate-45 translate-x-20 -translate-y-20 group-hover:scale-110 transition-transform origin-center"></div>
                         </div>
@@ -283,6 +311,42 @@ const PolaroidProject = ({ project, index }) => {
     );
 };
 
+const RedString = ({ delay = 0 }) => (
+    <div className="relative h-20 w-full overflow-hidden">
+        <motion.div
+            initial={{ scaleX: 0, opacity: 0 }}
+            whileInView={{ scaleX: 1, opacity: 0.4 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.5, delay }}
+            className="absolute left-1/4 top-1/2 w-1/2 h-0.5 bg-red-600 origin-left"
+        >
+            <div className="absolute left-0 -top-1 w-2 h-2 bg-red-600 rounded-full shadow-[0_0_8px_#dc2626]"></div>
+            <div className="absolute right-0 -top-1 w-2 h-2 bg-red-600 rounded-full shadow-[0_0_8px_#dc2626]"></div>
+        </motion.div>
+    </div>
+);
+
+const NarrativeInterstitial = ({ caseNo, text, subtext }) => (
+    <div className="py-40 flex flex-col items-center justify-center text-center">
+        <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="mb-8"
+        >
+            <div className="px-6 py-2 border-2 border-pencil sketchy-font text-xl uppercase tracking-[0.5em] text-pencil/60">
+                Phase {caseNo} Narrative
+            </div>
+        </motion.div>
+        <h2 className="text-5xl hand-drawn-font ink-bleed mb-6 max-w-2xl">
+            {text}
+        </h2>
+        <p className="typewriter sketchy-font text-2xl text-pencil/80 italic">
+            {subtext}
+        </p>
+    </div>
+);
+
 const HomePage = ({ data }) => {
     const projectsRef = useRef(null);
 
@@ -317,9 +381,25 @@ const HomePage = ({ data }) => {
         <main className="max-w-6xl mx-auto px-8 relative z-10">
             <MainHero data={data} />
 
+            <NarrativeInterstitial
+                caseNo="01"
+                text="The subject's cognitive framework spans the entire MERN architectural layer."
+                subtext="Retrieving technical dossiers for subject: DINESH M..."
+            />
+
+            <RedString delay={0.5} />
+
             {Object.entries(data.skills).map(([category, items], i) => (
                 <CategoryDossierCard key={category} category={category} skills={items} index={i} />
             ))}
+
+            <RedString delay={0.8} />
+
+            <NarrativeInterstitial
+                caseNo="02"
+                text="Investigating primary deployment targets and successful mission outcomes."
+                subtext="Opening confidential project evidence files..."
+            />
 
             <section className="py-60" ref={projectsRef}>
                 <div className="flex justify-between items-end mb-32">
@@ -340,6 +420,12 @@ const HomePage = ({ data }) => {
                     </div>
                 </div>
             </section>
+
+            <NarrativeInterstitial
+                caseNo="03"
+                text="Final stage reached. Direct extraction of the subject is now authorized."
+                subtext="Initializing secure communication line..."
+            />
             <section id="contact">
                 <ContactPage />
             </section>
