@@ -6,16 +6,16 @@ const ContactPage = () => {
     const [formState, setFormState] = useState({ name: '', email: '', message: '' });
 
     return (
-        <div className="min-h-screen pt-40 pb-20 px-8 relative overflow-hidden paper-texture">
-            {/* Background elements */}
+        <div className="min-h-screen pt-40 pb-20 px-8 relative overflow-hidden">
+            {/* Background elements (subtle) */}
             <div className="absolute top-20 right-20 w-64 h-64 border-4 border-dashed border-pencil opacity-10 rotate-12 -z-10"></div>
-            <div className="absolute bottom-20 left-20 w-80 h-80 bg-yellow-100/30 blur-3xl rounded-full -z-10"></div>
+            <div className="absolute bottom-20 left-20 w-80 h-80 bg-blue-100/10 blur-3xl rounded-full -z-10"></div>
 
             <div className="max-w-4xl mx-auto">
                 <motion.div
                     initial={{ y: 50, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
-                    className="bg-white p-12 shadow-paper-lg border-2 border-pencil relative"
+                    className="bg-white/40 backdrop-blur-md p-12 shadow-paper-lg border-2 border-pencil relative"
                 >
                     {/* Paperclip decoration */}
                     <div className="absolute -top-8 left-1/2 -translate-x-1/2 text-pencil rotate-90">

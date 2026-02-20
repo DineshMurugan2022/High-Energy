@@ -44,8 +44,10 @@ const ProjectCard3D = ({ position, project, index }) => {
                 <mesh>
                     <boxGeometry args={[2, 2.5, 0.1]} />
                     <meshStandardMaterial
-                        color="#f5f5dc"
-                        roughness={0.6}
+                        color="#ffffff"
+                        transparent
+                        opacity={0.1}
+                        roughness={0.2}
                         metalness={0.1}
                     />
                 </mesh>

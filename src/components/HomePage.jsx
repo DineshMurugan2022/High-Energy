@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useMemo } from 'react';
+﻿import React, { useEffect, useRef, useMemo, useState, lazy, Suspense } from 'react';
 import ContactPage from './ContactPage';
-import HeroScene3D from './HeroScene3D';
-import ParallaxBackground from './ParallaxBackground';
 import { motion } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Sparkles, Download, Paperclip, Search, Briefcase, Cpu, Code2, Globe, Layers } from 'lucide-react';
+import { Sparkles, Download, Paperclip, Search, Briefcase, Cpu, Code2, Globe, Layers, Github, ExternalLink } from 'lucide-react';
+
+const HeroScene3D = lazy(() => import('./HeroScene3D'));
 
 // Re-using components from main App for now or importing them if split
 const Reveal = ({ children, delay = 0, y = 30 }) => {
@@ -26,22 +26,11 @@ const Reveal = ({ children, delay = 0, y = 30 }) => {
 const MainHero = ({ data }) => {
     return (
         <div className="perspective-2000 py-28 mb-40 relative">
-            {/* 3D Background Scene */}
-            <HeroScene3D />
-            {/* Story Hook Typewriter */}
-            <div className="absolute top-0 left-0 p-8 z-50">
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="hand-drawn-font text-ink/40 text-[10px] tracking-[0.3em] flex flex-col gap-1"
-                >
-                    <div className="flex gap-2 items-center">
-                        <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                        <span>SYSTEM: AUTHORIZATION GRANTED</span>
-                    </div>
-                    <div>SUBJECT: DINESH M. // CLASS: MERN ELITE</div>
-                    <div className="typewriter w-fit">CLEARANCE: TOP SECRET // ACCESSING CASE FILES...</div>
-                </motion.div>
+            {/* 3D Background Scene (Lowered opacity to complement background) */}
+            <div className="opacity-30">
+                <Suspense fallback={null}>
+                    <HeroScene3D />
+                </Suspense>
             </div>
 
             <motion.div
@@ -53,20 +42,8 @@ const MainHero = ({ data }) => {
                 <div className="relative group perspective-1000">
                     <motion.div
                         whileHover={{ rotateY: 5, rotateX: -5 }}
-                        className="relative bg-white p-16 shadow-paper-lg border-2 border-ink -rotate-1 transform transition-all group-hover:shadow-paper-2xl duration-500"
+                        className="relative bg-transparent p-16 shadow-paper-lg border-2 border-ink -rotate-1 transform transition-all group-hover:shadow-paper-2xl duration-500"
                     >
-                        {/* Classified Stamp Slam */}
-                        <motion.div
-                            initial={{ scale: 3, opacity: 0, rotate: -45 }}
-                            animate={{ scale: 1, opacity: 1, rotate: -15 }}
-                            transition={{ delay: 1.5, type: "spring", stiffness: 300, damping: 15 }}
-                            className="absolute -top-10 -right-10 z-50 pointer-events-none"
-                        >
-                            <div className="px-8 py-4 border-8 border-red-600/80 text-red-600/80 hand-drawn-font text-5xl font-bold uppercase tracking-tighter mix-blend-multiply rotate-[-5deg] bg-white/10 backdrop-blur-[1px] shadow-lg">
-                                Classified
-                            </div>
-                        </motion.div>
-
                         <div className="absolute top-0 right-0 w-40 h-40 overflow-hidden pointer-events-none -translate-x-[2px] translate-y-[2px]">
                             <div className="absolute top-0 right-0 w-full h-full bg-yellow-100 -rotate-45 translate-x-20 -translate-y-20 group-hover:scale-110 transition-transform origin-center"></div>
                         </div>
@@ -84,7 +61,7 @@ const MainHero = ({ data }) => {
                                 </p>
                             </Reveal>
                             <Reveal delay={0.6}>
-                                <div className="max-w-xl text-2xl leading-relaxed italic border-l-8 border-pencil pl-8 py-4 bg-paper-light/50 shadow-inner">
+                                <div className="max-w-xl text-2xl leading-relaxed italic border-l-8 border-pencil pl-8 py-4 bg-transparent shadow-inner">
                                     {data.summary}
                                 </div>
                             </Reveal>
@@ -96,7 +73,7 @@ const MainHero = ({ data }) => {
                             download="Dinesh_Resume.pdf"
                             whileHover={{ y: -5 }}
                             whileTap={{ scale: 0.98 }}
-                            className="absolute -bottom-12 right-24 bg-white border-2 border-ink flex items-center z-30 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all hover:bg-slate-50"
+                            className="absolute -bottom-12 right-24 bg-transparent border-2 border-ink flex items-center z-30 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all"
                         >
                             {/* Centered Paperclip pinning to the edge */}
                             <div className="absolute -top-7 left-1/2 -translate-x-1/2 text-ink z-40 transform rotate-[15deg] drop-shadow-sm">
@@ -137,6 +114,63 @@ const MainHero = ({ data }) => {
             </motion.div >
         </div >
     );
+};
+
+const SKILL_ACCENTS = {
+    frontend: {
+        rgb: '37,99,235',
+        itemBg: 'bg-blue-50/25',
+        itemBorder: 'border-blue-400/35',
+        chipBg: 'bg-blue-100/75',
+        chipBorder: 'border-blue-400/35',
+        text: 'text-blue-800',
+        icon: 'group-hover:text-blue-700'
+    },
+    backend: {
+        rgb: '22,163,74',
+        itemBg: 'bg-emerald-50/25',
+        itemBorder: 'border-emerald-400/35',
+        chipBg: 'bg-emerald-100/75',
+        chipBorder: 'border-emerald-400/35',
+        text: 'text-emerald-800',
+        icon: 'group-hover:text-emerald-700'
+    },
+    database: {
+        rgb: '217,119,6',
+        itemBg: 'bg-amber-50/25',
+        itemBorder: 'border-amber-400/35',
+        chipBg: 'bg-amber-100/75',
+        chipBorder: 'border-amber-400/35',
+        text: 'text-amber-800',
+        icon: 'group-hover:text-amber-700'
+    },
+    devops: {
+        rgb: '79,70,229',
+        itemBg: 'bg-indigo-50/25',
+        itemBorder: 'border-indigo-400/35',
+        chipBg: 'bg-indigo-100/75',
+        chipBorder: 'border-indigo-400/35',
+        text: 'text-indigo-800',
+        icon: 'group-hover:text-indigo-700'
+    },
+    ai_methods: {
+        rgb: '225,29,72',
+        itemBg: 'bg-rose-50/25',
+        itemBorder: 'border-rose-400/35',
+        chipBg: 'bg-rose-100/75',
+        chipBorder: 'border-rose-400/35',
+        text: 'text-rose-800',
+        icon: 'group-hover:text-rose-700'
+    },
+    ui_ux: {
+        rgb: '8,145,178',
+        itemBg: 'bg-cyan-50/25',
+        itemBorder: 'border-cyan-400/35',
+        chipBg: 'bg-cyan-100/75',
+        chipBorder: 'border-cyan-400/35',
+        text: 'text-cyan-800',
+        icon: 'group-hover:text-cyan-700'
+    }
 };
 
 const CategoryDossierCard = ({ category, skills, index }) => {
@@ -222,7 +256,7 @@ const CategoryDossierCard = ({ category, skills, index }) => {
     }, [category, index]);
 
     return (
-        <section ref={containerRef} className="h-screen flex flex-col items-center justify-center relative overflow-hidden bg-white/5 border-b border-pencil/10 perspective-3000">
+        <section ref={containerRef} className="h-screen flex flex-col items-center justify-center relative overflow-hidden border-b border-pencil/5 perspective-3000">
             <div className="absolute top-10 w-full text-center z-20">
                 <Reveal>
                     <h2 className="text-6xl font-bold hand-drawn-font ink-bleed uppercase tracking-[0.2em]">{category} Document</h2>
@@ -231,7 +265,7 @@ const CategoryDossierCard = ({ category, skills, index }) => {
 
             <motion.div
                 ref={cardRef}
-                className="relative w-full max-w-4xl bg-white p-12 md:p-16 shadow-paper-2xl border-2 border-pencil rounded-sm flex flex-col"
+                className="relative w-full max-w-4xl bg-transparent p-12 md:p-16 shadow-paper-2xl border-2 border-pencil rounded-sm flex flex-col"
                 style={{ transformStyle: "preserve-3d" }}
             >
                 {/* Dossier Header */}
@@ -249,25 +283,37 @@ const CategoryDossierCard = ({ category, skills, index }) => {
                 {/* Skills Grid */}
                 <div ref={gridRef} className="grid grid-cols-2 md:grid-cols-3 gap-x-12 gap-y-10">
                     {skills.map((skill, i) => (
-                        <div key={i} className={`skill-item-${category} flex items-center gap-5 group cursor-pointer p-2 hover:bg-yellow-50/50 transition-colors rounded-lg overflow-visible`}>
-                            <div className="w-16 h-16 bg-paper-light border-2 border-pencil rounded-md flex items-center justify-center group-hover:rotate-6 group-hover:scale-110 transition-transform shadow-paper group-hover:shadow-pencil-lg shrink-0">
-                                <skill.icon className="text-ink transition-colors group-hover:text-blue-600" size={32} />
+                        <motion.div
+                            key={i}
+                            whileHover={{
+                                y: -3,
+                                boxShadow: `0 12px 30px rgba(${(SKILL_ACCENTS[category] || SKILL_ACCENTS.frontend).rgb},0.24), 0 0 22px rgba(${(SKILL_ACCENTS[category] || SKILL_ACCENTS.frontend).rgb},0.22)`
+                            }}
+                            className={`skill-item-${category} flex items-center gap-5 group cursor-pointer p-3 rounded-lg overflow-visible border transition-all ${(SKILL_ACCENTS[category] || SKILL_ACCENTS.frontend).itemBg} ${(SKILL_ACCENTS[category] || SKILL_ACCENTS.frontend).itemBorder}`}
+                            style={{
+                                boxShadow: `0 8px 24px rgba(${(SKILL_ACCENTS[category] || SKILL_ACCENTS.frontend).rgb},0.16), 0 0 14px rgba(${(SKILL_ACCENTS[category] || SKILL_ACCENTS.frontend).rgb},0.12)`
+                            }}
+                        >
+                            <div className="w-16 h-16 bg-transparent border-2 border-pencil rounded-md flex items-center justify-center group-hover:rotate-6 group-hover:scale-110 transition-transform shadow-paper shrink-0">
+                                <skill.icon className={`text-ink transition-colors ${(SKILL_ACCENTS[category] || SKILL_ACCENTS.frontend).icon}`} size={32} />
                             </div>
                             <div className="overflow-hidden">
-                                <h4 className="font-bold uppercase tracking-widest text-[11px] mb-1.5 truncate text-ink">{skill.name}</h4>
+                                <h4 className={`font-bold uppercase tracking-widest text-[11px] mb-1.5 truncate inline-block px-2 py-0.5 rounded-sm border ${ (SKILL_ACCENTS[category] || SKILL_ACCENTS.frontend).chipBg } ${(SKILL_ACCENTS[category] || SKILL_ACCENTS.frontend).chipBorder} ${(SKILL_ACCENTS[category] || SKILL_ACCENTS.frontend).text}`}>
+                                    {skill.name}
+                                </h4>
                                 <div className="flex gap-1">
                                     {[1, 2, 3, 4, 5].map(dot => (
-                                        <div key={dot} className={`w-2.5 h-2.5 rounded-full border border-pencil ${dot <= 4 ? 'bg-ink' : 'bg-transparent'}`}></div>
+                                        <div key={dot} className="w-2.5 h-2.5 rounded-full border border-pencil bg-ink"></div>
                                     ))}
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
 
                 {/* Stamped Certification */}
                 <div className="mt-16 self-end -rotate-6">
-                    <div className="px-6 py-3 border-4 border-double border-ink/80 text-ink/80 hand-drawn-font text-3xl font-bold rounded-sm uppercase tracking-tighter shadow-sketch bg-white/40">
+                    <div className="px-6 py-3 border-4 border-double border-ink/80 text-ink/80 hand-drawn-font text-3xl font-bold rounded-sm uppercase tracking-tighter shadow-sketch bg-transparent">
                         Vetted & Validated
                     </div>
                 </div>
@@ -293,63 +339,114 @@ const PolaroidProject = ({ project, index }) => {
         }
     }, [project.type]);
 
+    const cardRef = useRef(null);
+    const [previewFailed, setPreviewFailed] = useState(false);
+
+    const handlePointerMove = (e) => {
+        if (!cardRef.current) return;
+        const rect = cardRef.current.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width;
+        const y = (e.clientY - rect.top) / rect.height;
+        const rotateY = (x - 0.5) * 10;
+        const rotateX = (0.5 - y) * 8;
+        cardRef.current.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+    };
+
+    const resetPointer = () => {
+        if (!cardRef.current) return;
+        cardRef.current.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+    };
+
+    const glowByType = {
+        crm: 'rgba(37, 99, 235, 0.28)',
+        ai: 'rgba(225, 29, 72, 0.28)',
+        lab: 'rgba(8, 145, 178, 0.28)',
+        tool: 'rgba(217, 119, 6, 0.28)',
+        retail: 'rgba(22, 163, 74, 0.28)'
+    };
+    const glowColor = glowByType[project.type] || 'rgba(45,45,45,0.2)';
+    const techLabel = Array.isArray(project.tech) ? project.tech.join(' | ') : project.tech;
+    const projectDesc = project.description || project.desc;
+    const previewImage = project.preview || project.image || null;
+
     return (
-        <motion.div
-            className="polaroid relative overflow-hidden project-card"
+        <motion.article
+            ref={cardRef}
+            onPointerMove={handlePointerMove}
+            onPointerLeave={resetPointer}
+            initial={{ opacity: 0, y: 90, scale: 0.95 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1], delay: index * 0.06 }}
+            className="polaroid relative overflow-hidden project-card group bg-paper/95 border-2 border-pencil/35 [transform-style:preserve-3d] transition-transform duration-300 rounded-2xl"
+            style={{ willChange: 'transform' }}
         >
-            <div className="bg-paper-light aspect-[4/3] mb-4 border-b-2 border-pencil overflow-hidden relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-transparent to-ink/10"></div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                    <ProjectIcon size={120} className="text-pencil p-6 border-4 border-dashed border-pencil rounded-full opacity-30" />
+            <motion.div
+                className="absolute -inset-8 -z-10 blur-3xl"
+                animate={{ opacity: [0.22, 0.36, 0.22], scale: [0.98, 1.02, 0.98] }}
+                transition={{ duration: 5 + index, repeat: Infinity, ease: 'easeInOut' }}
+                style={{ background: `radial-gradient(circle, ${glowColor} 0%, rgba(255,255,255,0) 70%)` }}
+            />
+
+            <div className="relative rounded-xl border border-pencil/30 overflow-hidden bg-white">
+                <div className="relative aspect-[16/10] border-b border-pencil/25">
+                    {previewImage && !previewFailed ? (
+                        <img
+                            src={previewImage}
+                            alt={project.title}
+                            className="absolute inset-0 h-full w-full object-cover"
+                            loading="lazy"
+                            onError={() => setPreviewFailed(true)}
+                        />
+                    ) : (
+                        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-300">
+                            <ProjectIcon size={88} className="text-slate-500" />
+                        </div>
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-black/0 to-black/0"></div>
+                    <div className="absolute left-3 top-3 rounded bg-white/90 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-slate-700 border border-slate-300">
+                        {project.category || 'Project'}
+                    </div>
+                    {project.featured && (
+                        <div className="absolute right-3 top-3 rounded bg-blue-600 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-white">
+                            Featured
+                        </div>
+                    )}
                 </div>
-                <div className="absolute inset-x-0 bottom-0 p-6 bg-white/90 backdrop-blur-sm transform translate-y-full group-hover/card:translate-y-0 transition-transform">
-                    <p className="text-sm font-bold leading-tight uppercase">{project.desc}</p>
-                    <div className="mt-4 text-xs font-bold text-ink bg-yellow-200 inline-block px-3 py-2 rotate-2 italic">#{project.tech}</div>
+
+                <div className="p-5">
+                    <h3 className="text-xl font-semibold text-slate-900 leading-tight">{project.title}</h3>
+                    <p className="mt-2 text-sm text-slate-700 leading-relaxed line-clamp-2">{projectDesc}</p>
+                    <p className="mt-3 text-[11px] font-medium text-slate-600">{techLabel}</p>
+                    <div className="mt-3 space-y-1.5">
+                        <p className="text-[11px] text-slate-700"><span className="font-semibold text-slate-900">Role:</span> {project.role}</p>
+                        <p className="text-[11px] text-slate-700"><span className="font-semibold text-slate-900">Outcome:</span> {project.outcome}</p>
+                        <p className="text-[11px] text-slate-700"><span className="font-semibold text-slate-900">Impact:</span> {project.impact}</p>
+                    </div>
+
+                    <div className="mt-4 flex items-center gap-2">
+                        <a
+                            href={project.live}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 rounded-md border border-slate-500 bg-slate-900 px-3 py-2 text-xs font-semibold text-white transition-colors hover:bg-slate-800"
+                        >
+                            Live <ExternalLink size={12} />
+                        </a>
+                        <a
+                            href={project.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 rounded-md border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-800 transition-colors hover:bg-slate-100"
+                        >
+                            Code <Github size={12} />
+                        </a>
+                    </div>
                 </div>
             </div>
-            <div className="px-4">
-                <h3 className="sketchy-font text-4xl font-bold leading-none ink-bleed">{project.title}</h3>
-                <p className="text-xs text-pencil uppercase mt-2 tracking-widest">{project.subtitle || "Case File #0" + project.id}</p>
-            </div>
-        </motion.div>
+        </motion.article>
     );
 };
-
-const RedString = ({ delay = 0 }) => (
-    <div className="relative h-20 w-full overflow-hidden">
-        <motion.div
-            initial={{ scaleX: 0, opacity: 0 }}
-            whileInView={{ scaleX: 1, opacity: 0.4 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1.5, delay }}
-            className="absolute left-1/4 top-1/2 w-1/2 h-0.5 bg-red-600 origin-left"
-        >
-            <div className="absolute left-0 -top-1 w-2 h-2 bg-red-600 rounded-full shadow-[0_0_8px_#dc2626]"></div>
-            <div className="absolute right-0 -top-1 w-2 h-2 bg-red-600 rounded-full shadow-[0_0_8px_#dc2626]"></div>
-        </motion.div>
-    </div>
-);
-
-const NarrativeInterstitial = ({ caseNo, text, subtext }) => (
-    <div className="py-40 flex flex-col items-center justify-center text-center">
-        <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="mb-8"
-        >
-            <div className="px-6 py-2 border-2 border-pencil sketchy-font text-xl uppercase tracking-[0.5em] text-pencil/60">
-                Phase {caseNo} Narrative
-            </div>
-        </motion.div>
-        <h2 className="text-5xl hand-drawn-font ink-bleed mb-6 max-w-2xl">
-            {text}
-        </h2>
-        <p className="typewriter sketchy-font text-2xl text-pencil/80 italic">
-            {subtext}
-        </p>
-    </div>
-);
 
 const HomePage = ({ data }) => {
     const projectsRef = useRef(null);
@@ -358,22 +455,36 @@ const HomePage = ({ data }) => {
         const projectCards = gsap.utils.toArray('.project-card');
 
         projectCards.forEach((card, i) => {
-            gsap.fromTo(card,
-                { y: 200, opacity: 0, rotate: 10 },
+            const drift = i % 2 === 0 ? -18 : 18;
+            gsap.fromTo(
+                card,
+                { y: 180, opacity: 0, rotate: drift, scale: 0.88 },
                 {
                     y: 0,
                     opacity: 1,
-                    rotate: Math.random() * 8 - 4,
-                    duration: 1.2,
-                    ease: "power3.out",
+                    rotate: 0,
+                    scale: 1,
+                    duration: 1.1,
+                    ease: "power4.out",
                     scrollTrigger: {
                         trigger: card,
-                        start: "top bottom-=100",
-                        end: "top top",
-                        toggleActions: "play none none reverse"
+                        start: "top 85%",
+                        end: "top 35%",
+                        scrub: 0.2,
                     }
                 }
             );
+
+            gsap.to(card, {
+                yPercent: i % 2 === 0 ? -4 : -7,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: card,
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: true,
+                }
+            });
         });
 
         return () => {
@@ -385,51 +496,32 @@ const HomePage = ({ data }) => {
         <main className="max-w-6xl mx-auto px-8 relative z-10">
             <MainHero data={data} />
 
-            <NarrativeInterstitial
-                caseNo="01"
-                text="The subject's cognitive framework spans the entire MERN architectural layer."
-                subtext="Retrieving technical dossiers for subject: DINESH M..."
-            />
-
-            <RedString delay={0.5} />
-
             {Object.entries(data.skills).map(([category, items], i) => (
                 <CategoryDossierCard key={category} category={category} skills={items} index={i} />
             ))}
 
-            <RedString delay={0.8} />
-
-            <NarrativeInterstitial
-                caseNo="02"
-                text="Investigating primary deployment targets and successful mission outcomes."
-                subtext="Opening confidential project evidence files..."
-            />
-
-            <section className="py-60" ref={projectsRef}>
+            <section className="py-60 relative" ref={projectsRef}>
+                <div className="pointer-events-none absolute -top-24 left-0 w-64 h-64 rounded-full bg-blue-300/15 blur-3xl" />
+                <div className="pointer-events-none absolute bottom-10 right-10 w-72 h-72 rounded-full bg-rose-300/15 blur-3xl" />
                 <div className="flex justify-between items-end mb-32">
                     <Reveal>
-                        <h2 className="text-9xl font-bold hand-drawn-font ink-bleed">Dossier #01</h2>
+                        <h2 className="text-7xl md:text-8xl font-bold hand-drawn-font ink-bleed tracking-tight">Projects</h2>
                     </Reveal>
                     <Reveal delay={0.2}>
-                        <p className="sketchy-font text-4xl text-pencil italic">"Classified Operations"</p>
+                        <p className="sketchy-font text-2xl md:text-3xl text-pencil italic">Selected Work</p>
                     </Reveal>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-24">
                     {data.projects.map((p, i) => (
                         <PolaroidProject key={i} project={p} index={i} />
                     ))}
-                    <div className="polaroid aspect-[4/5] bg-paper-light border-2 border-dashed border-pencil flex flex-col items-center justify-center -rotate-2 group cursor-pointer hover:border-ink transition-colors">
-                        <Search size={60} className="text-pencil opacity-20 group-hover:opacity-100 transition-opacity mb-6" />
-                        <span className="hand-drawn-font text-3xl font-bold opacity-20 group-hover:opacity-100 tracking-[0.2em]">VIEW ARCHIVES</span>
+                    <div className="polaroid project-card aspect-[4/5] bg-paper-light/85 border-2 border-dashed border-pencil/60 flex flex-col items-center justify-center -rotate-2 group cursor-pointer hover:border-ink transition-all hover:-translate-y-1">
+                        <Search size={60} className="text-pencil opacity-50 group-hover:opacity-100 transition-opacity mb-6" />
+                        <span className="hand-drawn-font text-3xl font-bold opacity-60 group-hover:opacity-100 tracking-[0.2em]">VIEW ARCHIVES</span>
                     </div>
                 </div>
             </section>
 
-            <NarrativeInterstitial
-                caseNo="03"
-                text="Final stage reached. Direct extraction of the subject is now authorized."
-                subtext="Initializing secure communication line..."
-            />
             <section id="contact">
                 <ContactPage />
             </section>
@@ -438,3 +530,7 @@ const HomePage = ({ data }) => {
 };
 
 export default HomePage;
+
+
+
+

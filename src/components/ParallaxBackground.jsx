@@ -17,10 +17,10 @@ const ParallaxBackground = () => {
 
     return (
         <div ref={containerRef} className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-            {/* Layer 5 - Deepest (Slowest) - Gradient Base */}
+            {/* Layer 5 - Deepest (Slowest) - Subtle Gradient or Transparent */}
             <motion.div
                 style={{ y: layer5Y }}
-                className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900"
+                className="absolute inset-0 bg-gradient-to-br from-slate-900/40 via-blue-950/40 to-slate-900/40"
             />
 
             {/* Layer 4 - Deep geometric shapes */}

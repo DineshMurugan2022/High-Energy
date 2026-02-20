@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Link, useLocation } from 'react-router-dom';
-import { Github, Linkedin, Mail } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Github, Linkedin } from 'lucide-react';
 
 const Magnetic = ({ children }) => {
     const ref = React.useRef(null);
@@ -37,8 +37,6 @@ const Magnetic = ({ children }) => {
 };
 
 const Navbar = () => {
-    const location = useLocation();
-
     return (
         <nav className="fixed top-0 w-full z-50 p-10 flex justify-between items-center pointer-events-none">
             <Magnetic>
@@ -55,11 +53,11 @@ const Navbar = () => {
                             damping: 20,
                             delay: 0.2
                         }}
-                        className="relative bg-white p-5 shadow-sketch border-2 border-ink stamped cursor-pointer z-10 jitter-hover glitch-text overflow-hidden"
+                        className="relative bg-white/40 backdrop-blur-md p-5 shadow-sketch border-2 border-ink stamped cursor-pointer z-10 overflow-hidden"
                     >
                         <div className="relative">
                             {/* Chromatic Aberration Layers */}
-                            <span className="hand-drawn-font font-bold text-4xl tracking-tighter uppercase italic chromatic-text block select-none text-blue-800">
+                            <span className="hand-drawn-font font-bold text-4xl tracking-tighter uppercase italic block select-none text-blue-800">
                                 DINESH.M
                             </span>
 
@@ -79,7 +77,7 @@ const Navbar = () => {
                 <div className="flex gap-4">
                     {[
                         { icon: Github, href: "https://github.com" },
-                        { icon: Linkedin, href: "https://linkedin.com" },
+                        { icon: Linkedin, href: "https://www.linkedin.com/in/dinesh-dinesh-1a707b281/" },
                     ].map((btn, i) => (
                         <Magnetic key={i}>
                             <motion.a
@@ -103,7 +101,7 @@ const Navbar = () => {
                     }}
                     whileHover={{ scale: 1.05, rotate: 2 }}
                     whileTap={{ scale: 0.95 }}
-                    className="px-8 py-4 bg-ink text-white border-2 border-ink shadow-paper font-bold hand-drawn-font text-2xl tracking-widest transition-colors hover:bg-yellow-400 hover:text-ink cursor-pointer pointer-events-auto"
+                    className="px-8 py-4 bg-ink text-white border-2 border-ink shadow-paper font-bold hand-drawn-font text-2xl tracking-widest transition-colors hover:bg-white hover:text-ink cursor-pointer pointer-events-auto backdrop-blur-sm"
                 >
                     HIRE ME
                 </motion.button>
